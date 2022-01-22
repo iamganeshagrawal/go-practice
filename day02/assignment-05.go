@@ -58,10 +58,9 @@ func (pl ProductList) All(cb ProductCallBackFunc) bool {
 }
 
 func (pl ProductList) String() string {
-	// sb := new(strings.Builder)
 	bb := new(bytes.Buffer)
 	// minwidth, tabwidth, padding, padchar, flags
-	w := tabwriter.NewWriter(bb, 10, 8, 0, '\t', tabwriter.Debug)
+	w := tabwriter.NewWriter(bb, 10, 8, 0, '\t', tabwriter.AlignRight)
 
 	fmt.Fprintf(w, " %s\t %s\t %s\t", "Id", "Name", "Cost")
 	fmt.Fprintf(w, "\n %s\t %s\t %s\t", strings.Repeat("-", len("Id")), strings.Repeat("-", len("Name")), strings.Repeat("-", len("Cost")))
@@ -88,9 +87,17 @@ func main() {
 		{
 			Id:   3,
 			Name: "Eraser",
-			Cost: 10,
+			Cost: 20,
 		},
 	}
+	divider := strings.Repeat("-", 50)
 
 	fmt.Println(productList)
+	fmt.Println(divider)
+	fmt.Println(productList.Include(Product{1, "Pencil", 5}))
+	fmt.Println(divider)
+	fmt.Println(productList.Filter(func(p Product) bool {
+		return p.Cost > 10
+	}))
+	fmt.Println(divider)
 }
