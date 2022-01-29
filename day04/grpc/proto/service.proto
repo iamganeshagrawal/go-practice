@@ -1,0 +1,53 @@
+syntax="proto3";
+
+package proto;
+
+option go_package="/proto";
+
+/* message contracts */
+/* request & response */
+message AddRequest{
+    int32 x = 1;
+    int32 y = 2;
+}
+
+message AddResponse{
+    int32 result = 1;
+}
+
+/* server streaming */
+message PrimeRequest{
+    int32 start = 1;
+    int32 end = 2;
+}
+
+message PrimeResponse{
+    int32 PrimeNumber = 1;
+}
+
+/* client streaming */
+message AverageRequest{
+    int32 no = 1;
+}
+
+message AverageResponse{
+    int32 average = 1;
+}
+
+/* service contracts */
+service AppService{
+    
+    /* operation contracts */
+
+    /* request & response */
+    rpc Add(AddRequest) returns (AddResponse);
+
+    /* server streaming */
+    rpc GeneratePrimes(PrimeRequest) returns (stream PrimeResponse);
+
+    /* client streaming */
+    rpc CalculateAverage(stream AverageRequest) returns (AverageResponse);
+
+    /* bidirectional streaming */
+    rpc GenerateMultiPrimes(stream PrimeRequest) returns (stream PrimeResponse);
+}
