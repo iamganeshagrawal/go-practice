@@ -1,0 +1,51 @@
+directive @goField(forceResolver: Boolean, name: String) on INPUT_FIELD_DEFINITION | FIELD_DEFINITION
+
+scalar Time
+
+type Query {
+  getRoot(some_arg: String!): GetRootRes!
+}
+
+type GetRootRes {
+  some_arg: String!
+  TypeRoots: [TypeRoot]
+}
+
+type TypeRoot {
+  Id: ID!
+  FieldA: String!
+  # around 20 groups
+  GroupA: [TypeGroupA]! @goField(forceResolver: true)
+}
+
+type TypeGroupA {
+  EventId: Int!
+  TimeStamp: Time
+  # around 250 components
+  CompA1: TypeCompA1  @goField(forceResolver: true)
+  CompA2: TypeCompA2  @goField(forceResolver: true)
+}
+
+type TypeCompA1 {
+  Field1: Int!
+  Field2: String!
+  # approx 300-500 table row
+  TableA1: [TypeTableA1]  @goField(forceResolver: true)
+}
+
+type TypeTableA1 {
+  City: String!
+  Date: Time!
+}
+
+type TypeCompA2 {
+  Field3: Int!
+  Field4: String!
+
+  TableA2: [TypeTableA2]  @goField(forceResolver: true)
+}
+
+type TypeTableA2 {
+  F1: String!
+  F2: Time!
+}
